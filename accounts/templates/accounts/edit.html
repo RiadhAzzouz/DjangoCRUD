@@ -1,0 +1,25 @@
+{% extends 'accounts/base.html' %}
+{% block body %}
+    <form method="POST" action="update/{{ educations.id }}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="school_name">School Name</label>
+            <input type="text" name="school_name" value="{{ educations.school_name }}" required="required"/>
+        </div>
+        <div class="form-group">
+            <label for="diploma">Diploma</label>
+            <input type="text" name="diploma" value="{{ educations.diploma }}" required="required"/>
+        </div>
+        <div class="form-group">
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" value="{{ educations.start_date }}" required="required"/>
+        </div>
+        <div class="form-group">
+            <label for="end_date">End Date</label>
+            <input type="date" name="end_date" value="{{ educations.end_date }}" required="required"/>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-edit"></span> Update</button>
+        </div>
+    </form>
+{% endblock %}
