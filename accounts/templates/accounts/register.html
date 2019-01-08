@@ -1,6 +1,6 @@
 {% extends 'accounts/base.html' %}
 {% block body %}
-<form id="user_form" method="post" action="/accounts/register/">
+<form id="user_form" method="post" action="/accounts/register/" enctype="multipart/form-data">
 
 
             {% csrf_token %}
@@ -10,7 +10,8 @@
                  making everything look neater. -->
             {{ user_form.as_p }}
             {{ trainee_form.as_p }}
-
+            <input type='file' name='cv'>
+            <!--<button type="submit">Upload CV</button>-->
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Register" />
 </form>

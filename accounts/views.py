@@ -2,7 +2,7 @@ from accounts.forms import UserForm, TraineeForm, CompanyForm, EducationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import Education
+from .models import Education, Trainee, User
 from django.contrib.auth.decorators import login_required
 from django import forms
 
@@ -17,6 +17,7 @@ def register(request):
             user.save()
             trainee = trainee_form.save(commit=False)
             trainee.user = user
+            trainee.cv = request.FILES['cv']
             trainee.save()
             registered = True
             return redirect('/accounts/login/')
@@ -82,7 +83,8 @@ def user_logout(request):
 @login_required(login_url="/accounts/login/")
 def create_education(request):
     educations = Education.objects.filter(trainee=request.user)
-    context = {'educations': educations}
+    user = request.user
+    trainees = Trainee.objects.all()
     if request.method == 'POST':
         form = EducationForm(data=request.POST)
         if form.is_valid():
@@ -92,12 +94,18 @@ def create_education(request):
             return redirect('/accounts/create')
     else:
         form = EducationForm()
-    return render(request, 'accounts/create.html', {'form':form, 'educations':educations})
+    return render(request, 'accounts/create.html', {'form':form, 'educations':educations, 'user':user, 'trainees':trainees})
 
 def edit(request, id):
     educations = Education.objects.get(id=id)
     context = {'educations': educations}
     return render(request, 'accounts/edit.html', context)
+
+def editTrainee(request, id):
+    trainee = Trainee.objects.get(id=id)
+    user = trainee.user
+    context = {'trainee': trainee, 'user':user}
+    return render(request, 'accounts/editTrainee.html', context)
 
 def update(request, id):
     education = Education.objects.get(id=id)
@@ -106,6 +114,19 @@ def update(request, id):
     education.start_date = request.POST['start_date']
     education.end_date = request.POST['end_date']
     education.save()
+    return redirect('/accounts/create')
+
+def updateTrainee(request, id):
+    trainee = Trainee.objects.get(id=id)
+    user = trainee.user
+    trainee.first_name = request.POST['first_name']
+    trainee.last_name = request.POST['last_name']
+    trainee.date_of_birth = request.POST['date_of_birth']
+    user.phone = request.POST['phone']
+    user.email = request.POST['email']
+    user.address = request.POST['address']
+    trainee.save()
+    user.save()
     return redirect('/accounts/create')
 
 def delete(request, id):

@@ -9,6 +9,8 @@ urlpatterns = [
         url(r'^create/$', views.create_education, name='create'),
         url(r'^create/edit/(?P<id>\d+)$', views.edit, name='edit'),
         url(r'^create/edit/update/(?P<id>\d+)$', views.update, name='update'),
+        url(r'^create/editTrainee/(?P<id>\d+)$', views.editTrainee, name='editTrainee'),
+        url(r'^create/editTrainee/updateTrainee/(?P<id>\d+)$', views.updateTrainee, name='updateTrainee'),
         url(r'^create/delete/(?P<id>\d+)$', views.delete, name='delete'),
         url(r'^logout/$', views.user_logout, name='logout'),
 
